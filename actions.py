@@ -27,8 +27,8 @@ class Attack(Action):
         target_class: str = type(self.target).__name__
         attack_value: int = (self.actor.DEFAULT_ATTACK
                              + randint(*self.actor.ATTACK_VALUE_RANGE))
-        return (f'{actor_name} наносит урон {target_class}, '
-                f'равный {attack_value}')
+        return (f'{actor_name} deals damage {target_class}, '
+                f'equal to {attack_value}')
 
 
 @dataclass
@@ -40,7 +40,7 @@ class Defence(Action):
         actor_name: str = self.actor.name
         defence_value: int = (self.actor.DEFAULT_DEFENCE
                               + randint(*self.actor.DEFENCE_VALUE_RANGE))
-        return (f'{actor_name} блокирует {defence_value} ед. урона.')
+        return (f'{actor_name} blocks {defence_value} of damage.')
 
 
 @dataclass
@@ -50,7 +50,7 @@ class Luck(Action):
 
     def execute(self) -> str:
         actor_name: str = self.actor.name
-        return (f'{actor_name}, тебе благоволит удача.')
+        return (f'{actor_name}, luck favors you.')
 
 
 @dataclass
@@ -60,7 +60,7 @@ class IncreaseAttack(Action):
 
     def execute(self) -> str:
         actor_name: str = self.actor.name
-        return (f'{actor_name} увеличивает атаку.')
+        return (f'{actor_name} increases attack.')
 
 
 @dataclass
@@ -70,7 +70,7 @@ class IncreaseDefence(Action):
 
     def execute(self) -> str:
         actor_name: str = self.actor.name
-        return (f'{actor_name} увеличивает защиту.')
+        return (f'{actor_name} increases defence.')
 
 
 # make a dictionary with all actions

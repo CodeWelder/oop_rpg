@@ -36,8 +36,10 @@ class Character():
 class Warrior(Character):
     CLASS_NAME: ClassVar[str] = 'warrior'
     IS_PLAYABLE: ClassVar[bool] = True
-    CLASS_DESCPIPTION: ClassVar[str] = ('дерзкий воин ближнего боя. '
-                                        'Сильный, выносливый и отважный')
+    CLASS_DESCPIPTION: ClassVar[str] = ('versatile and formidable combatant, '
+                                        'skilled in wielding a wide range of '
+                                        'weapons and armor to protect '
+                                        'allies and vanquish foes.')
     ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (3, 5)
     DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
 
@@ -51,8 +53,12 @@ class Warrior(Character):
 class Mage(Character):
     CLASS_NAME: ClassVar[str] = 'mage'
     IS_PLAYABLE: ClassVar[bool] = True
-    CLASS_DESCPIPTION: ClassVar[str] = ('находчивый воин дальнего боя. '
-                                        'Обладает высоким интеллектом')
+    CLASS_DESCPIPTION: ClassVar[str] = ('a powerful spellcaster, '
+                                        'able to harness arcane energies '
+                                        'to cast a variety of spells '
+                                        'that can manipulate the elements, '
+                                        'control minds, or summon creatures '
+                                        'to aid them in battle.')
     ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
     DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (-2, 2)
 
@@ -67,8 +73,8 @@ class Mage(Character):
 class Goblin(Character):
     CLASS_NAME: ClassVar[str] = 'goblin'
     IS_PLAYABLE: ClassVar[bool] = False
-    CLASS_DESCPIPTION = ('маленький злой зеленый '
-                         'человекоподобный монстр')
+    CLASS_DESCPIPTION = ('a small, sneaky creature, '
+                         'cunning and vicious.')
     ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
     DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (-2, 2)
 
