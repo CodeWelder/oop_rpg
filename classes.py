@@ -29,7 +29,7 @@ class Character():
         self.possible_actions.update(self.unique_actions)
 
     def __str__(self) -> str:
-        return f'{self.CLASS_NAME} - {self.CLASS_DESCPIPTION}.'
+        return (f'{self.CLASS_NAME} - {self.CLASS_DESCPIPTION}.').capitalize()
 
 
 @dataclass
@@ -56,9 +56,7 @@ class Mage(Character):
     CLASS_DESCPIPTION: ClassVar[str] = ('a powerful spellcaster, '
                                         'able to harness arcane energies '
                                         'to cast a variety of spells '
-                                        'that can manipulate the elements, '
-                                        'control minds, or summon creatures '
-                                        'to aid them in battle.')
+                                        'that can manipulate the elements.')
     ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
     DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (-2, 2)
 

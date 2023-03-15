@@ -1,12 +1,20 @@
+import os
 from actions import actions
 from classes import Character, playable_classes
+
+
+def clear_console():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 
 def choice_char_class(char_name: str) -> Character:
     """
     Returns the selected character class.
     """
-
+    clear_console()
     approve_choice: str = ''
 
     while approve_choice != 'y':
@@ -23,7 +31,7 @@ def choice_char_class(char_name: str) -> Character:
         # ask to choose a class
         selected_class: str = input('Enter the class of the character '
                                     'you want to play: ').lower()
-
+        clear_console()
         # if selected class is available
         if selected_class in playable_classes:
             # create a player character
@@ -33,10 +41,12 @@ def choice_char_class(char_name: str) -> Character:
             # ask for approve
             approve_choice = input('Enter (Y) to confirm your choice '
                                    'or any other button '
-                                   'to select a different class'
+                                   'to select a different class: '
                                    ).lower()
+            clear_console()
         # if selected class is NOT available
-        print('Choose a class from the list of available.')
+        else:
+            print('Choose a class from the list of available.')
 
     return char_class
 
@@ -71,6 +81,8 @@ def start_training(character: Character) -> str:
         if cmd in actions and cmd in possible_actions:
             selected_action = actions[cmd](character).execute()
             print(selected_action)
+        else:
+            print(f'There is no such command like "{cmd}"')
     return 'Training is over.'
 
 
