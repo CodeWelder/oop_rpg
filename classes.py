@@ -4,88 +4,112 @@ from typing import ClassVar, Type
 
 
 @dataclass
-class Character():
+class CharClass():
     """Base class for all characters."""
-    CLASS_NAME: ClassVar[str] = 'base class'
-    IS_PLAYABLE: ClassVar[bool] = False  # is the class playable or not
-    CLASS_DESCPIPTION: ClassVar[str] = 'parent class for other classes'
-    DEFAULT_ATTACK: ClassVar[int] = 5
-    DEFAULT_DEFENCE: ClassVar[int] = 10
-    DEFAULT_STAMINA: ClassVar[int] = 80
-    ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]]
-    DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]]
+    # the stats will increase character' base stats
+    NAME: str = ''
+    IS_PLAYABLE: ClassVar[bool] = False
+    DESCPIPTION: ClassVar[str] = ''
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 0,
+        'AGI': 0,
+        'CON': 0,
+        'INT': 0,
+        }
 
-    name: str
-    is_player: bool = False
     # all posible actions
-    possible_actions: ClassVar[set[str]] = {
-        'attack',
-        'defence',
-    }
-    # actions in addition to the actions available to the parent class
-    unique_actions: ClassVar[set[str]] = set()
-
-    def __post_init__(self) -> None:
-        self.possible_actions.update(self.unique_actions)
+    actions: ClassVar[set[str]] = set()
 
     def __str__(self) -> str:
-        return (f'{self.CLASS_NAME} - {self.CLASS_DESCPIPTION}.').capitalize()
+        return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
 
 
 @dataclass
-class Warrior(Character):
-    CLASS_NAME: ClassVar[str] = 'warrior'
+class NoClass(CharClass):
+    NAME: ClassVar[str] = 'nobody'
     IS_PLAYABLE: ClassVar[bool] = True
-    CLASS_DESCPIPTION: ClassVar[str] = ('versatile and formidable combatant, '
-                                        'skilled in wielding a wide range of '
-                                        'weapons and armor to protect '
-                                        'allies and vanquish foes.')
-    ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (3, 5)
-    DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
+    DESCPIPTION: ClassVar[str] = 'character without class features'
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 0,
+        'AGI': 0,
+        'CON': 0,
+        'INT': 0,
+        }
+
+
+@dataclass
+class Warrior(CharClass):
+    NAME: ClassVar[str] = 'warrior'
+    IS_PLAYABLE: ClassVar[bool] = True
+    DESCPIPTION: ClassVar[str] = ('a versatile and formidable '
+                                  'combatant, skilled '
+                                  'in wielding a wide range of '
+                                  'weapons and armor to protect '
+                                  'allies and vanquish foes')
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 2,
+        'AGI': 1,
+        'CON': 1,
+        'INT': 0,
+        }
 
     # actions in addition to the actions available to the parent class
-    unique_actions: ClassVar[set[str]] = {
+    actions: ClassVar[set[str]] = {
         'increase defence',
     }
 
 
 @dataclass
-class Mage(Character):
-    CLASS_NAME: ClassVar[str] = 'mage'
+class Mage(CharClass):
+    NAME: ClassVar[str] = 'mage'
     IS_PLAYABLE: ClassVar[bool] = True
-    CLASS_DESCPIPTION: ClassVar[str] = ('a powerful spellcaster, '
-                                        'able to harness arcane energies '
-                                        'to cast a variety of spells '
-                                        'that can manipulate the elements.')
-    ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
-    DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (-2, 2)
+    DESCPIPTION: ClassVar[str] = ('a powerful spellcaster, '
+                                  'able to harness arcane energies '
+                                  'to cast a variety of spells '
+                                  'that can manipulate the elements')
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 0,
+        'AGI': 0,
+        'CON': 0,
+        'INT': 4,
+        }
 
     # actions in addition to the actions available to the parent class
-    unique_actions: ClassVar[set[str]] = {
+    actions: ClassVar[set[str]] = {
         'luck',
         'increase attack',
     }
 
 
 @dataclass
-class Goblin(Character):
-    CLASS_NAME: ClassVar[str] = 'goblin'
+class Thief(CharClass):
+    NAME: ClassVar[str] = 'thief'
     IS_PLAYABLE: ClassVar[bool] = False
-    CLASS_DESCPIPTION = ('a small, sneaky creature, '
-                         'cunning and vicious.')
-    ATTACK_VALUE_RANGE: ClassVar[tuple[int, int]] = (5, 10)
-    DEFENCE_VALUE_RANGE: ClassVar[tuple[int, int]] = (-2, 2)
+    DESCPIPTION = ('a small, sneaky creature, '
+                   'cunning and vicious')
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 0,
+        'AGI': 2,
+        'CON': 1,
+        'INT': 1,
+        }
 
     # actions in addition to the actions available to the parent class
-    unique_actions: ClassVar[set[str]] = {
+    actions: ClassVar[set[str]] = {
         'luck',
     }
 
 
-# make a dictionaries of classes
-all_classes: dict[str, Type[Character]] = {}
-playable_classes: dict[str, Type[Character]] = {}
-for char_class in Character.__subclasses__():
+# make dictionaries for:
+# - all classes
+# - playable classes
+all_classes: dict[str, Type[CharClass]] = {}
+playable_classes: dict[str, Type[CharClass]] = {}
+for char_class in CharClass.__subclasses__():
     if char_class.IS_PLAYABLE:
-        playable_classes[char_class.CLASS_NAME] = char_class
-    all_classes[char_class.CLASS_NAME] = char_class
+        playable_classes[char_class.NAME] = char_class
+    all_classes[char_class.NAME] = char_class

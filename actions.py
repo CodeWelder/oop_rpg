@@ -1,9 +1,9 @@
 """All actions game characters can do"""
 from dataclasses import dataclass
-from random import randint
+# from random import randint
 from typing import ClassVar, Optional, Type
 
-from classes import Character
+from character import Character
 
 
 @dataclass
@@ -16,19 +16,19 @@ class Action():
     def execute(self) -> str:
         return 'Default action executed'
 
+    def __str__(self) -> str:
+        return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
+
 
 @dataclass
 class Attack(Action):
     NAME: ClassVar[str] = 'attack'
-    DESCPIPTION: ClassVar[str] = 'to attack the target'
+    DESCPIPTION: ClassVar[str] = 'to attack your target'
 
     def execute(self) -> str:
         actor_name: str = self.actor.name
         target_class: str = type(self.target).__name__
-        attack_value: int = (self.actor.DEFAULT_ATTACK
-                             + randint(*self.actor.ATTACK_VALUE_RANGE))
-        return (f'{actor_name} deals damage {target_class}, '
-                f'equal to {attack_value}')
+        return (f'{actor_name} deals damage {target_class}')
 
 
 @dataclass
@@ -38,9 +38,7 @@ class Defence(Action):
 
     def execute(self) -> str:
         actor_name: str = self.actor.name
-        defence_value: int = (self.actor.DEFAULT_DEFENCE
-                              + randint(*self.actor.DEFENCE_VALUE_RANGE))
-        return (f'{actor_name} blocks {defence_value} of damage.')
+        return (f'{actor_name} blocks all damage.')
 
 
 @dataclass
@@ -67,6 +65,16 @@ class IncreaseAttack(Action):
 class IncreaseDefence(Action):
     NAME: ClassVar[str] = 'increase defence'
     DESCPIPTION: ClassVar[str] = 'to increase defence'
+
+    def execute(self) -> str:
+        actor_name: str = self.actor.name
+        return (f'{actor_name} increases defence.')
+
+
+@dataclass
+class Bite(Action):
+    NAME: ClassVar[str] = 'bite'
+    DESCPIPTION: ClassVar[str] = 'to bite your target'
 
     def execute(self) -> str:
         actor_name: str = self.actor.name

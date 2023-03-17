@@ -1,52 +1,102 @@
 import os
 from actions import actions
-from classes import Character, playable_classes
+from race import playable_race, Race
+from classes import playable_classes, CharClass
+from character import Character
 
 
 def clear_console():
+    """Clears console."""
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
 
 
-def choice_char_class(char_name: str) -> Character:
+def enter_char_name() -> str:
     """
-    Returns the selected character class.
+    Asks to enter a name and returns that name.
     """
-    clear_console()
     approve_choice: str = ''
 
     while approve_choice != 'y':
+        clear_console()
+        selected_name: str = input('Enter you character name: ')
+        print(f'You name is {selected_name}?')
+        approve_choice = input('Enter (y) to confirm your choice '
+                               'or any other button to change it: '
+                               ).lower()
+    return selected_name
 
+
+def choose_char_race() -> Race:
+    """
+    Asks to select a race and returns that Race.
+    """
+    approve_choice: str = ''
+
+    while approve_choice != 'y':
+        clear_console()
+        print('The following races are available to you:')
         # print available classes string by string
-        print('Available classes:')
-        for class_name in playable_classes:
+        for race_name in playable_race:
             text: str = (
-                f'{playable_classes[class_name].CLASS_NAME} - '
-                f'{playable_classes[class_name].CLASS_DESCPIPTION}'
+                f'{playable_race[race_name].NAME} - '
+                f'{playable_race[race_name].DESCPIPTION}'
             ).capitalize()
             print(text)
 
         # ask to choose a class
-        selected_class: str = input('Enter the class of the character '
+        selected_race: str = input('Enter a race of the character '
+                                   'you want to play: ').lower()
+        clear_console()
+        # if selected class is available
+        if selected_race in playable_race:
+            # create a player character
+            char_race: Race = playable_race[selected_race]()
+            # print what is selected
+            print(f'You have selected a race:\n{char_race}')
+            # ask for approve
+            approve_choice = input('Enter (y) to confirm your choice '
+                                   'or any other button to change it: '
+                                   ).lower()
+            clear_console()
+
+    return char_race
+
+
+def choose_char_class() -> CharClass:
+    """
+    Asks to select a class and returns that  class.
+    """
+    approve_choice: str = ''
+
+    while approve_choice != 'y':
+        clear_console()
+        print('The following classes are available to you:')
+        # print available classes string by string
+        for class_name in playable_classes:
+            text: str = (
+                f'{playable_classes[class_name].NAME} - '
+                f'{playable_classes[class_name].DESCPIPTION}'
+            ).capitalize()
+            print(text)
+
+        # ask to choose a class
+        selected_class: str = input('Enter a class of the character '
                                     'you want to play: ').lower()
         clear_console()
         # if selected class is available
         if selected_class in playable_classes:
             # create a player character
-            char_class: Character = playable_classes[selected_class](char_name)
+            char_class: CharClass = playable_classes[selected_class]()
             # print what is selected
             print(f'You have selected a class:\n{char_class}')
             # ask for approve
-            approve_choice = input('Enter (Y) to confirm your choice '
-                                   'or any other button '
-                                   'to select a different class: '
+            approve_choice = input('Enter (y) to confirm your choice '
+                                   'or any other button to change it: '
                                    ).lower()
             clear_console()
-        # if selected class is NOT available
-        else:
-            print('Choose a class from the list of available.')
 
     return char_class
 
@@ -58,13 +108,13 @@ def start_training(character: Character) -> str:
     """
 
     # get the actions available to the character
-    possible_actions: list[str] = list(character.possible_actions)
+    char_actions: list[str] = list(character.actions)
     # and sort them
-    possible_actions.sort()
+    char_actions.sort()
 
     print('Practice to control your character.')
     # print available actions string by string
-    for action in possible_actions:
+    for action in char_actions:
         text: str = (
             f'{actions[action].NAME} - '
             f'{actions[action].DESCPIPTION}'
@@ -78,12 +128,16 @@ def start_training(character: Character) -> str:
         # if the command is in the command list
         # the class method which matches the given command
         # will be called in the print() function.
-        if cmd in actions and cmd in possible_actions:
+        if cmd in actions and cmd in char_actions:
             selected_action = actions[cmd](character).execute()
             print(selected_action)
-        else:
-            print(f'There is no such command like "{cmd}"')
+
     return 'Training is over.'
 
 
-start_training(choice_char_class('Some_name'))
+if __name__ == '__main__':
+    player = Character(enter_char_name(),
+                       choose_char_race(),
+                       choose_char_class(),
+                       True)
+    start_training(player)
