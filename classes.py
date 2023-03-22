@@ -1,13 +1,15 @@
 """Classes of all living creatures in the game"""
 from dataclasses import dataclass
-from typing import ClassVar, Type
+from typing import ClassVar
+from character import CharacterAttribute
+import actions as act
 
 
 @dataclass
-class CharClass():
+class CharClass(CharacterAttribute):
     """Base class for all characters."""
     # the stats will increase character' base stats
-    NAME: str = ''
+    NAME: ClassVar[str] = ''
     IS_PLAYABLE: ClassVar[bool] = False
     DESCPIPTION: ClassVar[str] = ''
     BASE_STATS: ClassVar[dict[str, int]] = {
@@ -18,10 +20,14 @@ class CharClass():
         }
 
     # all posible actions
-    actions: ClassVar[set[str]] = set()
+    actions: ClassVar[set[type[act.Action]]] = set()
 
     def __str__(self) -> str:
         return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
+
+    @classmethod
+    def describe(cls) -> str:
+        return (f'{cls.NAME} - {cls.DESCPIPTION}.').capitalize()
 
 
 @dataclass
@@ -56,8 +62,8 @@ class Warrior(CharClass):
         }
 
     # actions in addition to the actions available to the parent class
-    actions: ClassVar[set[str]] = {
-        'increase defence',
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Slash,
     }
 
 
@@ -78,10 +84,7 @@ class Mage(CharClass):
         }
 
     # actions in addition to the actions available to the parent class
-    actions: ClassVar[set[str]] = {
-        'luck',
-        'increase attack',
-    }
+    actions: ClassVar[set[type[act.Action]]] = set()
 
 
 @dataclass
@@ -99,16 +102,14 @@ class Thief(CharClass):
         }
 
     # actions in addition to the actions available to the parent class
-    actions: ClassVar[set[str]] = {
-        'luck',
-    }
+    actions: ClassVar[set[type[act.Action]]] = set()
 
 
 # make dictionaries for:
 # - all classes
 # - playable classes
-all_classes: dict[str, Type[CharClass]] = {}
-playable_classes: dict[str, Type[CharClass]] = {}
+all_classes: dict[str, type[CharacterAttribute]] = {}
+playable_classes: dict[str, type[CharacterAttribute]] = {}
 for char_class in CharClass.__subclasses__():
     if char_class.IS_PLAYABLE:
         playable_classes[char_class.NAME] = char_class

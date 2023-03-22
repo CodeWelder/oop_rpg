@@ -1,8 +1,9 @@
 import os
-from actions import actions
-from race import playable_race, Race
-from classes import playable_classes, CharClass
-from character import Character
+from actions import Action
+from race import playable_race
+from classes import playable_classes
+from character import Character, CharacterAttribute
+import text
 
 
 def clear_console():
@@ -29,115 +30,84 @@ def enter_char_name() -> str:
     return selected_name
 
 
-def choose_char_race() -> Race:
+def choose_from(
+        options: dict[str, type[CharacterAttribute]]
+        ) -> type[CharacterAttribute]:
     """
-    Asks to select a race and returns that Race.
-    """
-    approve_choice: str = ''
-
-    while approve_choice != 'y':
-        clear_console()
-        print('The following races are available to you:')
-        # print available classes string by string
-        for race_name in playable_race:
-            text: str = (
-                f'{playable_race[race_name].NAME} - '
-                f'{playable_race[race_name].DESCPIPTION}'
-            ).capitalize()
-            print(text)
-
-        # ask to choose a class
-        selected_race: str = input('Enter a race of the character '
-                                   'you want to play: ').lower()
-        clear_console()
-        # if selected class is available
-        if selected_race in playable_race:
-            # create a player character
-            char_race: Race = playable_race[selected_race]()
-            # print what is selected
-            print(f'You have selected a race:\n{char_race}')
-            # ask for approve
-            approve_choice = input('Enter (y) to confirm your choice '
-                                   'or any other button to change it: '
-                                   ).lower()
-            clear_console()
-
-    return char_race
-
-
-def choose_char_class() -> CharClass:
-    """
-    Asks to select a class and returns that  class.
+    Print descriptions of values from a dictionary.
+    Ask to choose one of them.
+    Return chosen value.
     """
     approve_choice: str = ''
 
     while approve_choice != 'y':
         clear_console()
-        print('The following classes are available to you:')
-        # print available classes string by string
-        for class_name in playable_classes:
-            text: str = (
-                f'{playable_classes[class_name].NAME} - '
-                f'{playable_classes[class_name].DESCPIPTION}'
-            ).capitalize()
-            print(text)
+        print('The following options are available to you:')
+        print(text.HORIZONTAL_LINE)
+        # print all options in separate lines
+        for option in options:
+            description: str = str(options[option].describe())
+            print(description)
 
-        # ask to choose a class
-        selected_class: str = input('Enter a class of the character '
-                                    'you want to play: ').lower()
+        print(text.HORIZONTAL_LINE)
+        chosen: str = input('Enter your choice: ').lower()
         clear_console()
+
         # if selected class is available
-        if selected_class in playable_classes:
-            # create a player character
-            char_class: CharClass = playable_classes[selected_class]()
-            # print what is selected
-            print(f'You have selected a class:\n{char_class}')
-            # ask for approve
+        if chosen in options:
+            result: type[CharacterAttribute] = options[chosen]
+            print('You have chosen:')
+            print(result.describe())
+            print(text.HORIZONTAL_LINE)
             approve_choice = input('Enter (y) to confirm your choice '
                                    'or any other button to change it: '
                                    ).lower()
             clear_console()
 
-    return char_class
+    return result
 
 
 def start_training(character: Character) -> str:
     """
-    Takes as input a character object created in choice_char_class.
+    Takes as input a character instance.
     Returns messages about the results of a character's training cycle.
     """
 
-    # get the actions available to the character
-    char_actions: list[str] = list(character.actions)
-    # and sort them
-    char_actions.sort()
+    # construct dict of actions available to the character
+    actions_dict: dict[str, type[Action]] = dict()
+    for action in character.actions:
+        actions_dict[action.NAME] = action
 
-    print('Practice to control your character.')
+    print('The following options are available to you:')
+    print(text.HORIZONTAL_LINE)
+
     # print available actions string by string
-    for action in char_actions:
-        text: str = (
-            f'{actions[action].NAME} - '
-            f'{actions[action].DESCPIPTION}'
-        ).capitalize()
-        print(text)
+    for action in character.actions:
+        print(action.describe())
+    print('Skip - if you do not want to train.')
+    print(text.HORIZONTAL_LINE)
 
-    print('If you do not want to train, enter "skip".')
-    cmd: str = ''
-    while cmd != 'skip':
-        cmd = input('Enter command: ').lower()
+    chosen: str = ''
+    while chosen != 'skip':
+        chosen = input('Enter command: ').lower()
         # if the command is in the command list
         # the class method which matches the given command
         # will be called in the print() function.
-        if cmd in actions and cmd in char_actions:
-            selected_action = actions[cmd](character).execute()
-            print(selected_action)
+        if chosen in actions_dict:
+            selected = actions_dict[chosen](character).execute()
+            print(selected)
 
     return 'Training is over.'
 
 
 if __name__ == '__main__':
     player = Character(enter_char_name(),
-                       choose_char_race(),
-                       choose_char_class(),
+                       choose_from(playable_race),
+                       choose_from(playable_classes),
                        True)
     start_training(player)
+
+    # bob = Character('Bob', all_race['rat'], all_classes['warrior'])
+    # alice = Character('Alice', all_race['goblin'], all_classes['mage'])
+    # print(actions['attack'](bob, alice).execute())
+    # print(actions['defence'](alice, bob).execute())
