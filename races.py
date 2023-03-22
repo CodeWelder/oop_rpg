@@ -130,8 +130,8 @@ class Rat(Race):
 # - all race
 # - playable race
 all_race: dict[str, Type[CharacterAttribute]] = {}
-playable_race: dict[str, Type[CharacterAttribute]] = {}
+playable_races: dict[str, Type[CharacterAttribute]] = {}
 for char_race in Race.__subclasses__():
     if char_race.IS_PLAYABLE:
-        playable_race[char_race.NAME] = char_race
+        playable_races[char_race.NAME] = char_race
     all_race[char_race.NAME] = char_race

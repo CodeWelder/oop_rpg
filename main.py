@@ -1,6 +1,6 @@
 import os
 from actions import Action
-from race import playable_race
+from races import playable_races
 from classes import playable_classes
 from character import Character, CharacterAttribute
 import text
@@ -102,7 +102,7 @@ def start_training(character: Character) -> str:
 
 if __name__ == '__main__':
     player = Character(enter_char_name(),
-                       choose_from(playable_race),
+                       choose_from(playable_races),
                        choose_from(playable_classes),
                        True)
     start_training(player)

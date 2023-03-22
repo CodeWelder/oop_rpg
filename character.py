@@ -116,7 +116,7 @@ class Character():
 
 # for testing purpose
 if __name__ == '__main__':
-    from race import all_race
+    from races import all_race
     from classes import all_classes
 
     bob = Character('Bob', all_race['rat'], all_classes['warrior'])
