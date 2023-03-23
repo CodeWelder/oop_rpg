@@ -1,6 +1,6 @@
 """All types of of creatures stored here as race."""
 from dataclasses import dataclass
-from typing import ClassVar, Type
+from typing import ClassVar
 from character import CharacterAttribute
 import actions as act
 
@@ -28,10 +28,6 @@ class Race(CharacterAttribute):
 
     def __str__(self) -> str:
         return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
-
-    @classmethod
-    def describe(cls) -> str:
-        return (f'{cls.NAME} - {cls.DESCPIPTION}.').capitalize()
 
 
 @dataclass
@@ -85,6 +81,10 @@ class Orc(Race):
         'INT': 0,
         }
 
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Bite,
+    }
+
 
 @dataclass
 class Goblin(Race):
@@ -129,9 +129,9 @@ class Rat(Race):
 # make dictionaries for:
 # - all race
 # - playable race
-all_race: dict[str, Type[CharacterAttribute]] = {}
-playable_races: dict[str, Type[CharacterAttribute]] = {}
+all_races: dict[str, CharacterAttribute] = {}
+playable_races: dict[str, CharacterAttribute] = {}
 for char_race in Race.__subclasses__():
     if char_race.IS_PLAYABLE:
-        playable_races[char_race.NAME] = char_race
-    all_race[char_race.NAME] = char_race
+        playable_races[char_race.NAME] = char_race()
+    all_races[char_race.NAME] = char_race()

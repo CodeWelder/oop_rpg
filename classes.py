@@ -25,10 +25,6 @@ class CharClass(CharacterAttribute):
     def __str__(self) -> str:
         return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
 
-    @classmethod
-    def describe(cls) -> str:
-        return (f'{cls.NAME} - {cls.DESCPIPTION}.').capitalize()
-
 
 @dataclass
 class NoClass(CharClass):
@@ -108,9 +104,9 @@ class Thief(CharClass):
 # make dictionaries for:
 # - all classes
 # - playable classes
-all_classes: dict[str, type[CharacterAttribute]] = {}
-playable_classes: dict[str, type[CharacterAttribute]] = {}
+all_classes: dict[str, CharacterAttribute] = {}
+playable_classes: dict[str, CharacterAttribute] = {}
 for char_class in CharClass.__subclasses__():
     if char_class.IS_PLAYABLE:
-        playable_classes[char_class.NAME] = char_class
-    all_classes[char_class.NAME] = char_class
+        playable_classes[char_class.NAME] = char_class()
+    all_classes[char_class.NAME] = char_class()

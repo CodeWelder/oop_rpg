@@ -52,8 +52,8 @@ class Character():
     BASE_STATS_MULTIPLIER: ClassVar[int] = 10
 
     name: str
-    race_: type[CharacterAttribute]
-    class_: type[CharacterAttribute]
+    race_: CharacterAttribute
+    class_: CharacterAttribute
     is_player: bool = False
 
     # characteristics derived from basic stats
@@ -64,10 +64,6 @@ class Character():
     # Actions from this set will be available
     # to all creatures
     actions: ClassVar[set[type[Action]]] = set()
-    # = {
-    #     act.Attack,
-    #     act.Defence,
-    # }
 
     def get_all_stats(self) -> dict[str, int]:
         """
@@ -116,8 +112,8 @@ class Character():
 
 # for testing purpose
 if __name__ == '__main__':
-    from races import all_race
+    from races import all_races
     from classes import all_classes
 
-    bob = Character('Bob', all_race['rat'], all_classes['warrior'])
+    bob = Character('Bob', all_races['rat'], all_classes['warrior'])
     print(str(bob.actions))
