@@ -9,26 +9,31 @@ if TYPE_CHECKING:
 
 @dataclass
 class Action():
+    """Base action class."""
     actor: Character
     target: Character | None = None
     NAME: ClassVar[str] = 'default action'
-    DESCPIPTION: ClassVar[str] = 'default action'
+    DESCRIPTION: ClassVar[str] = 'default action'
 
     def execute(self) -> str:
         return 'Default action executed'
 
-    def __str__(self) -> str:
-        return (f'{self.NAME} - {self.DESCPIPTION}.').capitalize()
-
+    # for cases when I can't call __str__
     @classmethod
     def describe(cls) -> str:
-        return (f'{cls.NAME} - {cls.DESCPIPTION}.').capitalize()
+        """For cases when you can't call __str__."""
+        return (f'{cls.NAME} - {cls.DESCRIPTION}.').capitalize()
+
+    def __str__(self) -> str:
+        self.describe(type(self))
+        # return (f'{self.NAME} - {self.DESCRIPTION}.').capitalize()
 
 
 @dataclass
 class Attack(Action):
+    """A standard unarmed attack action class"""
     NAME: ClassVar[str] = 'attack'
-    DESCPIPTION: ClassVar[str] = 'to perform standard unarmed attack'
+    DESCRIPTION: ClassVar[str] = 'to perform standard unarmed attack'
 
     def execute(self) -> str:
         damage: int = self.actor.get_stats('STR')
@@ -39,7 +44,7 @@ class Attack(Action):
 @dataclass
 class Defence(Action):
     NAME: ClassVar[str] = 'defence'
-    DESCPIPTION: ClassVar[str] = 'to defend yourself unarmed'
+    DESCRIPTION: ClassVar[str] = 'to defend yourself unarmed'
 
     def execute(self) -> str:
         defence: int = self.actor.get_stats('AGI')
@@ -50,7 +55,7 @@ class Defence(Action):
 @dataclass
 class Slash(Action):
     NAME: ClassVar[str] = 'slash'
-    DESCPIPTION: ClassVar[str] = 'to slash your target with melee weapon'
+    DESCRIPTION: ClassVar[str] = 'to slash your target with melee weapon'
 
     def execute(self) -> str:
         damage: int = self.actor.get_stats('STR') * 2
@@ -61,7 +66,7 @@ class Slash(Action):
 @dataclass
 class Bite(Action):
     NAME: ClassVar[str] = 'bite'
-    DESCPIPTION: ClassVar[str] = 'to bite your target'
+    DESCRIPTION: ClassVar[str] = 'to bite your target'
 
     def execute(self) -> str:
         actor_name: str = self.actor.name

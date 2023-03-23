@@ -53,7 +53,7 @@ def choose_from(
         chosen: str = input('Enter your choice: ').lower()
         clear_console()
 
-        # if selected class is available
+        # if selected is available
         if chosen in options:
             result: CharacterAttribute = options[chosen]
             print('You have chosen:')
@@ -106,8 +106,3 @@ if __name__ == '__main__':
                        choose_from(playable_classes),
                        True)
     start_training(player)
-
-    # bob = Character('Bob', all_race['rat'], all_classes['warrior'])
-    # alice = Character('Alice', all_race['goblin'], all_classes['mage'])
-    # print(actions['attack'](bob, alice).execute())
-    # print(actions['defence'](alice, bob).execute())

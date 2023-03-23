@@ -16,10 +16,7 @@ class CharacterAttribute():
 
     # the stats will increase character' base stats
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 0,
-        'AGI': 0,
-        'CON': 0,
-        'INT': 0,
+        'STR': 0, 'AGI': 0, 'CON': 0, 'INT': 0,
         }
 
     # posible actions
@@ -28,9 +25,15 @@ class CharacterAttribute():
     def __str__(self) -> str:
         return (f'{self.NAME} - {self.DESCRIPTION}.').capitalize()
 
-    @classmethod
-    def describe(cls) -> str:
-        return (f'{cls.NAME} - {cls.DESCRIPTION}.').capitalize()
+    def __post_init__(self) -> None:
+        # all parent classes
+        # except instance's class and class 'object'
+        parents = type(self).__mro__[1:-1]
+        for parent in parents:
+            try:
+                self.actions.update(parent.actions)
+            except AttributeError:
+                pass
 
 
 @dataclass
@@ -116,4 +119,5 @@ if __name__ == '__main__':
     from classes import all_classes
 
     bob = Character('Bob', all_races['rat'], all_classes['warrior'])
+    print(type(bob.race_).__mro__)
     print(str(bob.actions))
