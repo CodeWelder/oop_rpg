@@ -31,8 +31,8 @@ def enter_char_name() -> str:
 
 
 def choose_from(
-        options: dict[str, type[CharacterAttribute]]
-        ) -> type[CharacterAttribute]:
+        options: dict[str, CharacterAttribute]
+        ) -> CharacterAttribute:
     """
     Print descriptions of values from a dictionary.
     Ask to choose one of them.
@@ -46,18 +46,18 @@ def choose_from(
         print(text.HORIZONTAL_LINE)
         # print all options in separate lines
         for option in options:
-            description: str = str(options[option].describe())
+            description: str = str(options[option])
             print(description)
 
         print(text.HORIZONTAL_LINE)
         chosen: str = input('Enter your choice: ').lower()
         clear_console()
 
-        # if selected class is available
+        # if selected is available
         if chosen in options:
-            result: type[CharacterAttribute] = options[chosen]
+            result: CharacterAttribute = options[chosen]
             print('You have chosen:')
-            print(result.describe())
+            print(str(result))
             print(text.HORIZONTAL_LINE)
             approve_choice = input('Enter (y) to confirm your choice '
                                    'or any other button to change it: '
@@ -106,8 +106,3 @@ if __name__ == '__main__':
                        choose_from(playable_classes),
                        True)
     start_training(player)
-
-    # bob = Character('Bob', all_race['rat'], all_classes['warrior'])
-    # alice = Character('Alice', all_race['goblin'], all_classes['mage'])
-    # print(actions['attack'](bob, alice).execute())
-    # print(actions['defence'](alice, bob).execute())

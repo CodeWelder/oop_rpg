@@ -16,10 +16,7 @@ class CharacterAttribute():
 
     # the stats will increase character' base stats
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 0,
-        'AGI': 0,
-        'CON': 0,
-        'INT': 0,
+        'STR': 0, 'AGI': 0, 'CON': 0, 'INT': 0,
         }
 
     # posible actions
@@ -28,9 +25,15 @@ class CharacterAttribute():
     def __str__(self) -> str:
         return (f'{self.NAME} - {self.DESCRIPTION}.').capitalize()
 
-    @classmethod
-    def describe(cls) -> str:
-        return (f'{cls.NAME} - {cls.DESCRIPTION}.').capitalize()
+    def __post_init__(self) -> None:
+        # all parent classes
+        # except instance's class and class 'object'
+        parents = type(self).__mro__[1:-1]
+        for parent in parents:
+            try:
+                self.actions.update(parent.actions)
+            except AttributeError:
+                pass
 
 
 @dataclass
@@ -52,8 +55,8 @@ class Character():
     BASE_STATS_MULTIPLIER: ClassVar[int] = 10
 
     name: str
-    race_: type[CharacterAttribute]
-    class_: type[CharacterAttribute]
+    race_: CharacterAttribute
+    class_: CharacterAttribute
     is_player: bool = False
 
     # characteristics derived from basic stats
@@ -64,10 +67,6 @@ class Character():
     # Actions from this set will be available
     # to all creatures
     actions: ClassVar[set[type[Action]]] = set()
-    # = {
-    #     act.Attack,
-    #     act.Defence,
-    # }
 
     def get_all_stats(self) -> dict[str, int]:
         """
@@ -116,8 +115,9 @@ class Character():
 
 # for testing purpose
 if __name__ == '__main__':
-    from races import all_race
+    from races import all_races
     from classes import all_classes
 
-    bob = Character('Bob', all_race['rat'], all_classes['warrior'])
+    bob = Character('Bob', all_races['rat'], all_classes['warrior'])
+    print(type(bob.race_).__mro__)
     print(str(bob.actions))
