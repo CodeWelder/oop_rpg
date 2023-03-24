@@ -33,10 +33,7 @@ class Warrior(CharClass):
                                   'allies and vanquish foes')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 2,
-        'AGI': 1,
-        'CON': 1,
-        'INT': 0,
+        'STR': 2, 'AGI': 1, 'CON': 1, 'INT': 0,
         }
 
     # actions in addition to the actions available to the parent class
@@ -55,10 +52,7 @@ class Mage(CharClass):
                                   'that can manipulate the elements')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 0,
-        'AGI': 0,
-        'CON': 0,
-        'INT': 4,
+        'STR': 0, 'AGI': 0, 'CON': 0, 'INT': 4,
         }
 
     # actions in addition to the actions available to the parent class
@@ -73,22 +67,18 @@ class Thief(CharClass):
                    'cunning and vicious')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 0,
-        'AGI': 2,
-        'CON': 1,
-        'INT': 1,
+        'STR': 0, 'AGI': 2, 'CON': 1, 'INT': 1,
         }
 
     # actions in addition to the actions available to the parent class
     actions: ClassVar[set[type[act.Action]]] = set()
 
 
-# make dictionaries for:
+# make lists of:
 # - all classes
 # - playable classes
-all_classes: dict[str, CharacterAttribute] = {}
-playable_classes: dict[str, CharacterAttribute] = {}
-for char_class in CharClass.__subclasses__():
-    if char_class.IS_PLAYABLE:
-        playable_classes[char_class.NAME] = char_class()
-    all_classes[char_class.NAME] = char_class()
+all_classes_types: list[type[CharClass]] = CharClass.__subclasses__()
+all_classes: list[CharacterAttribute] = [x() for x in all_classes_types]
+playable_classes: list[CharacterAttribute] = list(
+    filter(lambda x: x.IS_PLAYABLE, all_classes)
+)

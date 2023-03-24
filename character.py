@@ -45,10 +45,7 @@ class Character():
     """
     # Base stats for all creatures and race
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 10,
-        'AGI': 10,
-        'CON': 10,
-        'INT': 10,
+        'STR': 10, 'AGI': 10, 'CON': 10, 'INT': 10,
         }
 
     # used to count characteristics derived from basic stats

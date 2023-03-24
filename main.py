@@ -31,11 +31,11 @@ def enter_char_name() -> str:
 
 
 def choose_from(
-        options: dict[str, CharacterAttribute]
+        options: list[CharacterAttribute]
         ) -> CharacterAttribute:
     """
     Print descriptions of values from a dictionary.
-    Ask to choose one of them.
+    Ask to choose one of them by number.
     Return chosen value.
     """
     approve_choice: str = ''
@@ -45,16 +45,16 @@ def choose_from(
         print('The following options are available to you:')
         print(text.HORIZONTAL_LINE)
         # print all options in separate lines
-        for option in options:
-            description: str = str(options[option])
+        for i, option in enumerate(options):
+            description: str = f'{i}. {str(option)}'
             print(description)
 
         print(text.HORIZONTAL_LINE)
-        chosen: str = input('Enter your choice: ').lower()
+        chosen: int = int(input('Enter your choice: '))
         clear_console()
 
         # if selected is available
-        if chosen in options:
+        if chosen in range(len(options)):
             result: CharacterAttribute = options[chosen]
             print('You have chosen:')
             print(str(result))

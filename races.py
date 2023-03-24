@@ -25,10 +25,7 @@ class Human(Race):
                                   'and physical characteristics')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 1,
-        'AGI': 1,
-        'CON': 1,
-        'INT': 1,
+        'STR': 1, 'AGI': 1, 'CON': 1, 'INT': 1,
         }
 
 
@@ -42,10 +39,7 @@ class Elf(Race):
                                   'and a talent for magic')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 0,
-        'AGI': 2,
-        'CON': 0,
-        'INT': 2,
+        'STR': 0, 'AGI': 2, 'CON': 0, 'INT': 2,
         }
 
 
@@ -60,10 +54,7 @@ class Orc(Race):
                                   'culture')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': 2,
-        'AGI': 0,
-        'CON': 2,
-        'INT': 0,
+        'STR': 2, 'AGI': 0, 'CON': 2, 'INT': 0,
         }
 
     actions: ClassVar[set[type[act.Action]]] = {
@@ -81,10 +72,7 @@ class Goblin(Race):
                                   'for mechanical and trap-making abilities')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': -2,
-        'AGI': 4,
-        'CON': -2,
-        'INT': 0,
+        'STR': -2, 'AGI': 4, 'CON': -2, 'INT': 0,
         }
 
 
@@ -100,10 +88,7 @@ class Rat(Race):
                                   'and agility')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
-        'STR': -5,
-        'AGI': 5,
-        'CON': -5,
-        'INT': -8,
+        'STR': -5, 'AGI': 5, 'CON': -5, 'INT': -8,
         }
 
     actions: ClassVar[set[type[act.Action]]] = {
@@ -111,12 +96,11 @@ class Rat(Race):
     }
 
 
-# make dictionaries for:
-# - all race
-# - playable race
-all_races: dict[str, CharacterAttribute] = {}
-playable_races: dict[str, CharacterAttribute] = {}
-for char_race in Race.__subclasses__():
-    if char_race.IS_PLAYABLE:
-        playable_races[char_race.NAME] = char_race()
-    all_races[char_race.NAME] = char_race()
+# make lists of:
+# - all races
+# - playable races
+all_races_types: list[type[Race]] = Race.__subclasses__()
+all_races: list[CharacterAttribute] = [x() for x in all_races_types]
+playable_races: list[CharacterAttribute] = list(
+    filter(lambda x: x.IS_PLAYABLE, all_races)
+)
