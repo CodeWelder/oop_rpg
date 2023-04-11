@@ -15,7 +15,7 @@ class CharClass(CharacterAttribute):
 class NoClass(CharClass):
     NAME: ClassVar[str] = 'nobody'
     IS_PLAYABLE: ClassVar[bool] = True
-    DESCRIPTION: ClassVar[str] = 'character without class features'
+    DESCRIPTION: ClassVar[str] = 'a character without class features'
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': 0, 'AGI': 0, 'CON': 0, 'INT': 0,
@@ -56,7 +56,10 @@ class Mage(CharClass):
         }
 
     # actions in addition to the actions available to the parent class
-    actions: ClassVar[set[type[act.Action]]] = set()
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Fireball,
+        act.IceShield,
+    }
 
 
 @dataclass
@@ -82,3 +85,13 @@ all_classes: list[CharacterAttribute] = [x() for x in all_classes_types]
 playable_classes: list[CharacterAttribute] = list(
     filter(lambda x: x.IS_PLAYABLE, all_classes)
 )
+
+# for testing purpose
+if __name__ == '__main__':
+
+    mage = Mage()
+    print(type(mage).__mro__)
+    print(mage.actions)
+    thief = Thief()
+    print(type(thief).__mro__)
+    print(thief.actions)

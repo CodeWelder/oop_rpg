@@ -1,6 +1,6 @@
 """Character class module."""
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -63,7 +63,7 @@ class Character():
 
     # Actions from this set will be available
     # to all creatures
-    actions: ClassVar[set[type[Action]]] = set()
+    actions: set[type[Action]] = field(default_factory=set)
 
     def get_all_stats(self) -> dict[str, int]:
         """
@@ -87,20 +87,40 @@ class Character():
         return result
 
     def update_actions(self) -> None:
+        self.actions.clear()
         self.actions.update(self.race_.actions)
         self.actions.update(self.class_.actions)
 
-    # get short description of a character
-    # i.e. "Bob the Goblin Warrior"
+    def get_actions_list(self) -> list[type[Action]]:
+        return sorted(list(self.actions), key=(lambda x: x.NAME))
+
+    def perform_action(
+            self,
+            action: type[Action],
+            target: Character = None
+    ) -> tuple[int, int]:
+        performed_action = action(self, target)
+        performed_action.describe_action()
+        return performed_action.execute()
+
     def __str__(self) -> str:
+        """
+        Return short description of a character\n
+        i.e. 'Bob the Goblin Warrior'.
+        """
         return (f'{self.name} '
                 f'the {self.race_.NAME.capitalize()} '
-                f'{self.class_.NAME.capitalize()}')
+                f'{self.class_.NAME.capitalize()}').strip()
 
-    # get long descriprions with stats and characteristics
     def __repr__(self) -> str:
-        return (f'{str(self)}.\n'
-                f'Stats: {self.get_all_stats()}')
+        """
+        Return short description of a character\n
+        + stats and characteristics.
+        """
+        return (
+            f'{str(self)}.\n'
+            f'Stats: {self.get_all_stats()}'
+        )
 
     def __post_init__(self) -> None:
         self.update_actions()
@@ -115,6 +135,12 @@ if __name__ == '__main__':
     from races import all_races
     from classes import all_classes
 
-    bob = Character('Bob', all_races['rat'], all_classes['warrior'])
+    bob = Character('Bob', all_races[2], all_classes[2])
     print(type(bob.race_).__mro__)
+    print(type(bob.class_).__mro__)
     print(str(bob.actions))
+    print('-------------------------')
+    rob = Character('Rob', all_races[0], all_classes[0])
+    print(type(rob.race_).__mro__)
+    print(type(rob.class_).__mro__)
+    print(str(rob.actions))

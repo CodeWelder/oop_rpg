@@ -20,7 +20,7 @@ class Human(Race):
     """Human race."""
     NAME: ClassVar[str] = 'human'
     IS_PLAYABLE: ClassVar[bool] = True
-    DESCRIPTION: ClassVar[str] = ('diverse and adaptable race, '
+    DESCRIPTION: ClassVar[str] = ('a diverse and adaptable race, '
                                   'with a wide range of cultural '
                                   'and physical characteristics')
 
@@ -104,3 +104,13 @@ all_races: list[CharacterAttribute] = [x() for x in all_races_types]
 playable_races: list[CharacterAttribute] = list(
     filter(lambda x: x.IS_PLAYABLE, all_races)
 )
+
+# for testing purpose
+if __name__ == '__main__':
+
+    orc = Orc()
+    print(type(orc).__mro__)
+    print(orc.actions)
+    goblin = Goblin()
+    print(type(goblin).__mro__)
+    print(goblin.actions)
