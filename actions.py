@@ -188,6 +188,104 @@ class IceShield(Action):
         return 'Creates an ice shield - {} defence.'.format(self.defence)
 
 
+@dataclass
+class Backstab(Action):
+    NAME: ClassVar[str] = 'backstab'
+    DESCRIPTION: ClassVar[str] = ('to attack the target from behind '
+                                  'with a melee weapon')
+
+    def __post_init__(self) -> None:
+        # impact of the action
+        self.damage = self.str_() * 3
+        self.defence = -5
+        # cost of the action
+        self.health = 0
+        self.stamina = -10
+        self.mana = 0
+
+    def describe_action(self) -> None:
+        """Return action description in a battle."""
+        return 'Backstabs with a weapon - {} damage'.format(self.damage)
+
+
+@dataclass
+class SmokeBomb(Action):
+    NAME: ClassVar[str] = 'smoke bomb'
+    DESCRIPTION: ClassVar[str] = ('to create a cloud of smoke'
+                                  'to obscure the battlefield')
+
+    def __post_init__(self) -> None:
+        # impact of the action
+        self.damage = 0
+        self.defence = 0
+        # cost of the action
+        self.health = 0
+        self.stamina = -15
+        self.mana = 0
+
+    def describe_action(self) -> None:
+        """Return action description in a battle."""
+        return 'Throws a smoke bomb.'
+
+
+@dataclass
+class Peck(Action):
+    NAME: ClassVar[str] = 'peck'
+    DESCRIPTION: ClassVar[str] = 'to peck at your target with your beak'
+
+    def __post_init__(self) -> None:
+        # impact of the action
+        self.damage = self.str_() * 2
+        self.defence = 0
+        # cost of the action
+        self.health = 0
+        self.stamina = -5
+        self.mana = 0
+
+    def describe_action(self) -> None:
+        """Return action description in a battle."""
+        return 'Pecks with beak - {} damage'.format(self.damage)
+
+
+@dataclass
+class TailBlow(Action):
+    NAME: ClassVar[str] = 'tail blow'
+    DESCRIPTION: ClassVar[str] = ('to strike your target '
+                                  'with a powerful tail blow')
+
+    def __post_init__(self) -> None:
+        # impact of the action
+        self.damage = self.str_() * 1.5
+        self.defence = -3
+        # cost of the action
+        self.health = 0
+        self.stamina = -5
+        self.mana = 0
+
+    def describe_action(self) -> None:
+        """Return action description in a battle."""
+        return 'Strikes with a tail - {} damage.'.format(self.damage)
+
+
+@dataclass
+class Claw(Action):
+    NAME: ClassVar[str] = 'claw'
+    DESCRIPTION: ClassVar[str] = 'to slash your target with your claws'
+
+    def __post_init__(self) -> None:
+        # impact of the action
+        self.damage = self.str_() + self.agi_()
+        self.defence = 0
+        # cost of the action
+        self.health = 0
+        self.stamina = -6
+        self.mana = 0
+
+    def describe_action(self) -> None:
+        """Return action description in a battle."""
+        return 'Claws - {} damage'.format(self.damage)
+
+
 # make the list of all actions
 # all_actions: list[type[Action]] = Action.__subclasses__()
 # all_actions: list[Action] = [x() for x in all_actions_types]

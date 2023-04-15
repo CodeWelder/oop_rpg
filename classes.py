@@ -13,8 +13,8 @@ class CharClass(CharacterAttribute):
 
 @dataclass
 class NoClass(CharClass):
-    NAME: ClassVar[str] = 'nobody'
-    IS_PLAYABLE: ClassVar[bool] = True
+    NAME: ClassVar[str] = ''
+    IS_PLAYABLE: ClassVar[bool] = False
     DESCRIPTION: ClassVar[str] = 'a character without class features'
 
     BASE_STATS: ClassVar[dict[str, int]] = {
@@ -65,16 +65,19 @@ class Mage(CharClass):
 @dataclass
 class Thief(CharClass):
     NAME: ClassVar[str] = 'thief'
-    IS_PLAYABLE: ClassVar[bool] = False
-    DESCRIPTION = ('a small, sneaky creature, '
-                   'cunning and vicious')
+    IS_PLAYABLE: ClassVar[bool] = True
+    DESCRIPTION = ('an agile and skilled at stealing valuable items '
+                   'and information while remaining undetected')
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': 0, 'AGI': 2, 'CON': 1, 'INT': 1,
         }
 
     # actions in addition to the actions available to the parent class
-    actions: ClassVar[set[type[act.Action]]] = set()
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.SmokeBomb,
+        act.Backstab,
+    }
 
 
 # make lists of:

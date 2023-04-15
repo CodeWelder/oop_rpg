@@ -1,6 +1,5 @@
 from character import Character
 
-
 SCREEN_WIDTH: int = 80
 
 
@@ -22,7 +21,39 @@ def strings_to_edges(
     return result
 
 
-def print_round_header(
+def get_stat_bar(
+    char: Character,
+    stat: str = 'HP',
+    left_side: bool = True,
+) -> str:
+    """Returns bar of HP (health), SP (stamina) or MP (mana)."""
+    BAR_RESOLUTION: int = 5
+
+    stat_value_mapping: dict[str, int] = {
+        'HP': char.health,
+        'SP': char.stamina,
+        'MP': char.mana,
+    }
+    stat_symbol_mapping: dict[str, str] = {
+        'HP': '█',
+        'SP': '░',
+        'MP': '▓',
+    }
+
+    stat_value: int = stat_value_mapping[stat]
+    stat_symbol: str = stat_symbol_mapping[stat]
+    bar: str = int(stat_value / BAR_RESOLUTION) * stat_symbol
+    result: str = ''
+
+    if left_side is True:
+        result: str = f'{stat} {bar} {stat_value}'
+    else:
+        result: str = f'{stat_value} {bar} {stat}'
+
+    return result
+
+
+def get_round_header(
     char1: Character,
     char2: Character,
     round_numder: int
@@ -46,29 +77,20 @@ def print_round_header(
     char1_name: str = str(char1)
     char2_name: str = str(char2)
     names_line: str = strings_to_edges(char1_name, char2_name)
+
     # Health line
-    char1_health_bar: str = f'HP {int(char1.health / 5) * "█"} {char1.health}'
-    char2_health_bar: str = f'{char2.health} {int(char2.health / 5) * "█"} HP'
+    char1_health_bar: str = get_stat_bar(char1, 'HP')
+    char2_health_bar: str = get_stat_bar(char2, 'HP', False)
     health_line: str = strings_to_edges(char1_health_bar, char2_health_bar)
+
     # Stamina line
-    char1_stamina_bar: str = (
-        f'SP {int(char1.stamina / 5) * "░"} '
-        f'{char1.stamina}'
-    )
-    char2_stamina_bar: str = (
-        f'{char2.stamina} '
-        f'{int(char2.stamina / 5) * "░"} SP'
-    )
+    char1_stamina_bar: str = get_stat_bar(char1, 'SP')
+    char2_stamina_bar: str = get_stat_bar(char2, 'SP', False)
     stamina_line: str = strings_to_edges(char1_stamina_bar, char2_stamina_bar)
+
     # Mana line
-    char1_mana_bar: str = (
-        f'MP {int(char1.mana / 5) * "▓"} '
-        f'{char1.mana}'
-    )
-    char2_mana_bar: str = (
-        f'{char2.mana} '
-        f'{int(char2.mana / 5) * "▓"} MP'
-    )
+    char1_mana_bar: str = get_stat_bar(char1, 'MP')
+    char2_mana_bar: str = get_stat_bar(char2, 'MP', False)
     mana_line: str = strings_to_edges(char1_mana_bar, char2_mana_bar)
 
     header_to_print: str = (
@@ -80,4 +102,4 @@ def print_round_header(
         f'{H_BORDER_DOWN}'
     )
 
-    print(header_to_print)
+    return header_to_print

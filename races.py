@@ -20,9 +20,11 @@ class Human(Race):
     """Human race."""
     NAME: ClassVar[str] = 'human'
     IS_PLAYABLE: ClassVar[bool] = True
-    DESCRIPTION: ClassVar[str] = ('a diverse and adaptable race, '
-                                  'with a wide range of cultural '
-                                  'and physical characteristics')
+    DESCRIPTION: ClassVar[str] = (
+        'a diverse and adaptable race, '
+        'with a wide range of cultural '
+        'and physical characteristics'
+    )
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': 1, 'AGI': 1, 'CON': 1, 'INT': 1,
@@ -34,9 +36,11 @@ class Elf(Race):
     """Elf race."""
     NAME: ClassVar[str] = 'elf'
     IS_PLAYABLE: ClassVar[bool] = True
-    DESCRIPTION: ClassVar[str] = ('a graceful and long-lived race '
-                                  'with a deep connection to nature '
-                                  'and a talent for magic')
+    DESCRIPTION: ClassVar[str] = (
+        'a graceful and long-lived race '
+        'with a deep connection to nature '
+        'and a talent for magic'
+    )
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': 0, 'AGI': 2, 'CON': 0, 'INT': 2,
@@ -48,10 +52,12 @@ class Orc(Race):
     """Orc race."""
     NAME: ClassVar[str] = 'orc'
     IS_PLAYABLE: ClassVar[bool] = True
-    DESCRIPTION: ClassVar[str] = ('a powerful and fearsome race '
-                                  'known for their physical prowess, '
-                                  'fierce demeanor, and often savage '
-                                  'culture')
+    DESCRIPTION: ClassVar[str] = (
+        'a powerful and fearsome race '
+        'known for their physical prowess, '
+        'fierce demeanor, and often savage '
+        'culture'
+    )
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': 2, 'AGI': 0, 'CON': 2, 'INT': 0,
@@ -66,10 +72,12 @@ class Orc(Race):
 class Goblin(Race):
     """Goblin race."""
     NAME: ClassVar[str] = 'goblin'
-    IS_PLAYABLE: ClassVar[bool] = False
-    DESCRIPTION: ClassVar[str] = ('a small and cunning race, often '
-                                  'found in large groups, with a knack '
-                                  'for mechanical and trap-making abilities')
+    IS_PLAYABLE: ClassVar[bool] = True
+    DESCRIPTION: ClassVar[str] = (
+        'a small and cunning race, often '
+        'found in large groups, with a knack '
+        'for mechanical and trap-making abilities'
+    )
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': -2, 'AGI': 4, 'CON': -2, 'INT': 0,
@@ -78,14 +86,16 @@ class Goblin(Race):
 
 @dataclass
 class Rat(Race):
-    """Rat race"""
+    """Rat race."""
     NAME: ClassVar[str] = 'rat'
     IS_PLAYABLE: ClassVar[bool] = False
-    DESCRIPTION: ClassVar[str] = ('typically viewed as pest or vermin, '
-                                  'but may also be used as familiars '
-                                  'or as minions of evil wizards, and '
-                                  'can possess some surprising cunning '
-                                  'and agility')
+    DESCRIPTION: ClassVar[str] = (
+        'typically viewed as pest or vermin, '
+        'but may also be used as familiars '
+        'or as minions of evil wizards, and '
+        'can possess some surprising cunning '
+        'and agility'
+    )
 
     BASE_STATS: ClassVar[dict[str, int]] = {
         'STR': -5, 'AGI': 5, 'CON': -5, 'INT': -8,
@@ -93,6 +103,69 @@ class Rat(Race):
 
     actions: ClassVar[set[type[act.Action]]] = {
         act.Bite,
+        act.TailBlow,
+    }
+
+
+@dataclass
+class Bear(Race):
+    """Bear animal."""
+    NAME: ClassVar[str] = 'bear'
+    IS_PLAYABLE: ClassVar[bool] = False
+    DESCRIPTION: ClassVar[str] = (
+        'a large and powerful animal with sharp'
+        'claws and teeth, '
+        'known for their ferocity and strength'
+    )
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 4, 'AGI': 0, 'CON': 3, 'INT': -5,
+    }
+
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Bite,
+        act.Claw,
+    }
+
+
+@dataclass
+class Eagle(Race):
+    """Eagle animal."""
+    NAME: ClassVar[str] = 'eagle'
+    IS_PLAYABLE: ClassVar[bool] = False
+    DESCRIPTION: ClassVar[str] = (
+        'a large bird of prey with sharp talons '
+        'and keen eyesight, known for their speed '
+        'and agility in the air'
+    )
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 2, 'AGI': 3, 'CON': 1, 'INT': 0,
+    }
+
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Peck,
+    }
+
+
+@dataclass
+class Crocodile(Race):
+    """Crocodile animal."""
+    NAME: ClassVar[str] = 'crocodile'
+    IS_PLAYABLE: ClassVar[bool] = False
+    DESCRIPTION: ClassVar[str] = (
+        'a large reptile with powerful jaws '
+        'and tough, scaly skin, known for their '
+        'ability to ambush prey in the water'
+    )
+
+    BASE_STATS: ClassVar[dict[str, int]] = {
+        'STR': 3, 'AGI': 1, 'CON': 3, 'INT': -5,
+    }
+
+    actions: ClassVar[set[type[act.Action]]] = {
+        act.Bite,
+        act.TailBlow,
     }
 
 

@@ -65,6 +65,37 @@ class Character():
     # to all creatures
     actions: set[type[Action]] = field(default_factory=set)
 
+    def get_stat_bar(
+        self,
+        stat: str = 'HP',
+        left_side: bool = True,
+    ) -> str:
+        """Returns bar of HP (health), SP (stamina) or MP (mana)."""
+        BAR_RESOLUTION: int = 5
+
+        stat_value_mapping: dict[str, int] = {
+            'HP': self.health,
+            'SP': self.stamina,
+            'MP': self.mana,
+        }
+        stat_symbol_mapping: dict[str, str] = {
+            'HP': '█',
+            'SP': '░',
+            'MP': '▓',
+        }
+
+        stat_value: int = stat_value_mapping[stat]
+        stat_symbol: str = stat_symbol_mapping[stat]
+        bar: str = int(stat_value / BAR_RESOLUTION) * stat_symbol
+        result: str = ''
+
+        if left_side is True:
+            result: str = f'{stat} {bar} {stat_value}'
+        else:
+            result: str = f'{stat_value} {bar} {stat}'
+
+        return result
+
     def get_all_stats(self) -> dict[str, int]:
         """
         Returns dict with all actual stats of a character,
@@ -117,9 +148,13 @@ class Character():
         Return short description of a character\n
         + stats and characteristics.
         """
+
         return (
             f'{str(self)}.\n'
-            f'Stats: {self.get_all_stats()}'
+            f"{self.get_stat_bar('HP')}\n"
+            f"{self.get_stat_bar('SP')}\n"
+            f"{self.get_stat_bar('MP')}"
+            # f'Stats: {self.get_all_stats()}'
         )
 
     def __post_init__(self) -> None:
@@ -136,11 +171,12 @@ if __name__ == '__main__':
     from classes import all_classes
 
     bob = Character('Bob', all_races[2], all_classes[2])
-    print(type(bob.race_).__mro__)
-    print(type(bob.class_).__mro__)
-    print(str(bob.actions))
-    print('-------------------------')
-    rob = Character('Rob', all_races[0], all_classes[0])
-    print(type(rob.race_).__mro__)
-    print(type(rob.class_).__mro__)
-    print(str(rob.actions))
+    # print(type(bob.race_).__mro__)
+    # print(type(bob.class_).__mro__)
+    # print(str(bob.actions))
+    # print('-------------------------')
+    # rob = Character('Rob', all_races[0], all_classes[0])
+    # print(type(rob.race_).__mro__)
+    # print(type(rob.class_).__mro__)
+    # print(str(rob.actions))
+    print(bob.get_stat_bar(left_side=False))
